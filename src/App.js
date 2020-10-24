@@ -1,29 +1,42 @@
 import React from 'react';
-import 'minimatch'
 import './App.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Container, Row, Col } from "react-bootstrap";
+import CreateUser from './components/CreateUser';
+import Users from './components/Users'
 
 class Books extends React.Component{
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      books: [
+      users: [
         {
-          name: 'Harry Potter',
-          author: 'Micheal',
-          description: 'This is the book based on the Harry Potter movie'
+          name: 'Jermaine',
+          email: 'jermaine.antwi@icloud.com',
+          gen: 15,
+          id: '094345'
+
         },
         {
-          name: 'BFG',
-          author: 'Roald Dalph',
-          description: 'This book is amazing.'
+          name: 'Ricardo Brant',
+          email: 'ricardo@gmail.com',
+          gen: 1,
+          id: '556456'
+        },
+        {
+          name: 'Ahmed Zaky',
+          email: 'ahmed@gmail.com',
+          gen: 12,
+          id: '443534'
         }
       ],
       name: '',
-      author: '',
-      description: ''
+      email: '',
+      gen: '',
+      id: ''
     }
   }
-  
+
   handleChange = (event) => {
     event.preventDefault();
     this.setState({ [event.target.name]: event.target.value });
@@ -33,7 +46,6 @@ class Books extends React.Component{
     event.preventDefault();
     const newbook = {
       name: this.state.name,
-      author: this.state.author,
       description: this.state.description
     }
    this.setState({
@@ -42,44 +54,47 @@ class Books extends React.Component{
      author: '',
      description: ''
    })
-   
+
   }
+
+   deleteUser = (id) => {
+     let user = this.state.users.filter((user) => user.id !== id);
+     this.setState({
+       users: user,
+     });
+   };
+
+   addNewUser = (user) => {
+      user.id = Math.random().toString();
+     this.setState({
+       users: [...this.state.users, user]
+     });
+   };
+
+   editUser = (id, updatedUser) => {
+     this.setState({
+       users: this.state.users.map((user) =>
+       user.id === id ? updatedUser : user
+     ),
+   });
+ };
 
   render() {
     return (
-      <div style={{margin: '2rem'}}>
-        <form onSubmit={this.handleSubmit}>
-          <div style={{display: 'flex', flexDirection: 'column', width: '34vh'}}>
-            <label>Name</label>
-          <input type="text" name="name" onChange={this.handleChange} />
-          <label>Author</label>
-          <input type="text" name="author" onChange={this.handleChange} />
-          <label>Description</label>
-          <textarea name="description" onChange={this.handleChange} ></textarea>
-          </div>
-          <button class="button" type="submit">Submit</button>
-                  </form>
-                  <table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Author</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    {this.state.books.map ((books, id) => {
-      return (
-       <tr>
-         <td>{books.name}</td>
-         <td>{books.author}</td>
-      <td>{books.description}</td>
-       </tr>
-      )
-    })}
-  </tbody>
-</table>
-      </div>
+        <Container fluid style={{ marginTop: "2rem" }}>
+          <Row>
+            <Col md="4">
+              <h4>ADD USERS</h4>
+              <br/>
+              <CreateUser addUser={this.addNewUser} />
+            </Col>
+            <Col>
+            <h4>ALL CODETRAIN USERS</h4>
+            <br/>
+              <Users userData={this.state.users} deleteUser={this.deleteUser} editUser={this.editUser} />
+            </Col>
+          </Row>
+        </Container>
     )
   }
 }
