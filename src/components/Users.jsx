@@ -8,7 +8,7 @@ const Users = (props) => {
             <Row>
                 {
                     props.userData.map((user) => {
-                        if (userData === 0){
+                        if (user === 0){
                         return <h1>There are no users</h1>
                         }
                         return <User userInfo={user} key={user.id} deleteUser={props.deleteUser} editUser={props.editUser}/>
